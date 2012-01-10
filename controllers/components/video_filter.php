@@ -205,10 +205,13 @@ class VideoFilterComponent extends BaseFilterComponent {
         } else if ($m[1] == 'Duration') {
           $data['duration'] = ceil(intval($m[2]));
           Logger::trace("Extract duration of '$filename': ".$data['duration']."s");
+        } else if ($m[1] == 'DateTimeOriginal' || $m[1] == 'MediaCreateDate') {
+	  $data['date'] = trim($m[2]);
+          Logger::trace("Extract original date of '$filename': ".$data['date']);
         }
       } 
-      if (!$data['width'] || !$data['height'] || !$data['duration']) {
-        Logger::warn("Could not extract width, height, or durration from '$filename'. Width is {$data['width']}, height is {$data['height']}, duration is {$data['duration']}");
+      if (!$data['width'] || !$data['height'] || !$data['duration'] || !$data['date']) {
+        Logger::warn("Could not extract width, height, durration, or date from '$filename'. Width is {$data['width']}, height is {$data['height']}, duration is {$data['duration']}, date will be set to the current date/time.");
       }
     }
     return $media;
