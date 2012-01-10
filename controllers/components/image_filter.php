@@ -40,7 +40,7 @@ class ImageFilterComponent extends BaseFilterComponent {
   }
 
   function getExtensions() {
-    return array('jpeg', 'jpg');
+    return array('jpeg', 'jpg', 'png');
   }
 
   /** Read the meta data from the file 
@@ -185,7 +185,9 @@ class ImageFilterComponent extends BaseFilterComponent {
       return $dateIptc;
     }
     // No IPTC date: Extract Exif date or now
-    return $this->_extract($data, 'jpg/exif/EXIF/DateTimeOriginal', date('Y-m-d H:i:s', time()));
+    $date = $this->_extract($data, 'jpg/exif/EXIF/DateTimeOriginal', null);
+    if ($date) { return $date; }
+    return $this->_extract($data, 'jpg/exif/EXIF/ModifyDate', date('Y-m-d H:i:s', time()));
   }
 
   /** Extracts the date of the file. It extracts the date of IPTC and EXIF.
@@ -205,7 +207,9 @@ class ImageFilterComponent extends BaseFilterComponent {
       return $dateIptc;
     }
     // No IPTC date: Extract Exif date or now
-    return $this->_extract($data, 'DateTimeOriginal', date('Y-m-d H:i:s', time()));
+    $date = $this->_extract($data, 'DateTimeOriginal', null);
+    if ($date) { return $date; }
+    return $this->_extract($data, 'ModifyDate', date('Y-m-d H:i:s', time()));
   }
 
   /** Extract the image data from the exif tool array and save it as Media
